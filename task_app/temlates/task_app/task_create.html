@@ -1,0 +1,16 @@
+{% extends 'index.html'%}
+{% block content%}
+
+<h1 style="padding: 10px 0 0 30px">Создать задачу</h1>
+<a href="{% url 'tasks' %}" style="position: absolute; top: 12%; left: 61%;">На главную</a>
+
+<form class="task-wrapper" method="post" action="{% url 'task-create' %}">
+    {% csrf_token %}
+    <p style="padding-left: 35px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Arial, sans-serif;">Категория задачи*:    {{ form.task_type }}
+    <br>Название*:                 {{ form.task_name }}
+    <br>Описание:     {{ form.description }}
+    <br>Дедлайн:       {{ form.deadline_date }}</p>
+    <input class="button" style="position: absolute; bottom: 37%; left: 63%;" type="submit" value="Создать">
+</form>
+
+{% endblock content%}

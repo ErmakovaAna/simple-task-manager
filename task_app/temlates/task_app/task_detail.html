@@ -1,0 +1,38 @@
+{% extends 'index.html'%}
+{% block content%}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<h1 style="padding: 10px 0 0 30px">О задаче</h1>
+{% if task.issuer_id == user.pk %}
+<a href="{% url 'task-update' task.id %}" style="position: absolute; top: 10%; left: 59%; font-size: 30px;"><i class="material-icons" style="color: #6667ab;">edit</i></a>
+<a href="{% url 'task-delete' task.id %}" style="position: absolute; top: 10%; left: 62%; font-size: 30px;"><i class="material-icons" style="color: #6667ab;">delete</i></a>
+{% endif %}
+<a href="{% url 'tasks' %}" style="position: absolute; top: 10%; left: 65%; font-size: 30px;"><i class="material-icons" style="color: #6667ab;">home</i></a>
+
+<div class="task-wrapper">
+    <p style="padding-left: 35px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Arial, sans-serif;"><b>{{ task.task_name }} | {{ task.task_type }}</b>
+    <br>Создатель задачи:&ensp;<b>{{ task.issuer }}</b><img style="border-radius: 50%; margin-left: 20px;" class="account-img" src='{{ task.issuer.profile.image.url }}'>
+    <br>Дата создания:&ensp;{{ task.issue_date }}
+    <br>Дедлайн:&ensp;{{ task.deadline_date }}
+    {% if task.description %}
+    <br><i>Описание задачи:</i>&ensp;{{ task.description }}
+    <a href="{% url 'task-select' task.id %}" class="button" style="position: absolute; top: 69%; left: 62%;">Выбрать</a>
+    {% else %}
+    <a href="{% url 'task-select' task.id %}" class="button" style="position: absolute; top: 52%; left: 62%;">Выбрать</a>
+    {% endif %}
+    </p>
+</div>
+<footer style="justify-content: space-between; padding: 10px 30px 20px 30px; border-radius: 10px 10px 0 0;">
+    <h6>Над задачей работают:</h6>
+    <div class="img-block" style="padding-left: 35px; display: inline; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Arial, sans-serif;">
+        {% for performer in performers %}
+            {{ performer }}
+            <img style="display: inline; margin-left: 10px; border-radius: 50%;" class="account-img" src="{{ performer.profile.image.url }}">&emsp;
+        {% endfor %}
+    </div>
+</footer>
+
+{% endblock content%}

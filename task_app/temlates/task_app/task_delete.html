@@ -1,0 +1,15 @@
+{% extends 'index.html'%}
+{% block content%}
+
+<h1 style="padding: 10px 0 0 30px">Удалить задачу</h1>
+<a href="{% url 'task' task.id %}" style="position: absolute; top: 12%; left: 64%;">Назад</a>
+
+{% if task.issuer_id == user.pk %}
+<form class="task-wrapper" method="post" action="{% url 'task-delete' task.id %}">
+    {% csrf_token %}
+    <p style="padding-left: 35px; padding-bottom: 40px; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Arial, sans-serif;">Вы уверены, что хотите удалить задачу: <i><b>{{ task }}</b></i>?</i></p>
+        <input class="button" style="position: absolute; bottom: 65%; left: 63%;" type="submit" value="Удалить" />
+{% endif %}
+</form>
+
+{% endblock content%}

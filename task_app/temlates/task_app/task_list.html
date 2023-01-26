@@ -1,0 +1,68 @@
+{% extends 'index.html'%}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+{% block content %}
+
+<header class="header-bar">
+    <div>
+        {% if request.user.is_authenticated %}
+        <h1 style="margin-bottom: 8px;">Привет, {{ request.user.username|title }}</h1>
+        {% else %}
+        <h1 style="margin-bottom: 8px;">Привет, Аноним</h1>
+        {% endif %}
+        <h3 style="margin: 0; margin-top: 0;">Добро пожаловать в менеджер задач!</h3>
+    </div>
+
+    <nav>
+        <ul>
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url 'task-create' %}">Создать задачу</a></li>
+            <li><a href="{% url 'user_app:logout' %}">&emsp; &emsp; &emsp; Выйти</a></li>
+            {% else %}
+            <li><a href="{% url 'user_app:login' %}"> &emsp; &emsp; &emsp; &nbsp; Войти</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</header>
+<section lass="task-wrapper">
+    {% for task in page_obj %}
+        {% if task.is_overdue %}
+            <article class="task-wrapper" style="background-color:#f5eff5;">
+                <p style="padding-left: 35px;"><strike style="color: #857f85;">{{ task.task_name }}</strike></p>
+                <a href="{% url 'task' task.id %}" style="position: absolute; padding-left: 485px; font-size: 30px;">&#128065</a>
+            </article>
+        {% else %}
+            <article class="task-wrapper">
+                <p style="padding-right: 100px; padding-left: 35px;">{{ task.task_name }}</p>
+                <a href="{% url 'task' task.id %}" style="position: absolute; padding-left: 485px; font-size: 30px;">&#128065</a>
+            </article>
+        {% endif %}
+    {% empty %}
+    <article class="task-wrapper" style="padding-left: 35px;">
+    <h3>Не создано ни одной задачи</h3>
+    </article>
+    {% endfor %}
+
+    <nav aria-label="pagination">
+        <ul class="pagination" style="margin-top: 10px; margin-bottom: 10px;">
+            {% if page_obj.has_previous %}
+            <a style="padding-right: 30px;" href="?page=1">&#10096;&nbsp;<b>1</b></a>
+            <a style="padding-right: 250px;" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>&emsp;
+            {% endif %}
+            {% if page_obj.has_next %}
+            <a style="padding-left: 250px;" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a style="padding-left: 30px;" href="?page={{ page_obj.paginator.num_pages }}"><b>{{ page_obj.paginator.num_pages }}</b> &#10097;</a>
+            {% endif %}
+        </ul>
+    </nav>
+
+<footer class="header-bar">
+    <h6 style="margin: 0; padding-left: 233px;">Создано в рамках учебной практической работы.</h6>
+</footer>
+
+{% endblock content%}
+
